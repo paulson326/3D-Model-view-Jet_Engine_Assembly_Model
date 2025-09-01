@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>3D Model Viewer</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <style>
+    body { 
+      margin: 0; 
+      font-family: Arial, sans-serif; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: center; 
+      height: 100vh; 
+      background: #f9f9f9; 
+    }
+    model-viewer {
+      width: 90vw; 
+      height: 80vh; 
+      border: 1px solid #ccc; 
+      border-radius: 10px; 
+      background: white;
+    }
+    select {
+      margin: 10px; 
+      padding: 5px 10px; 
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h2>3D Model Viewer</h2>
+  
+  <!-- Dropdown to select model -->
+  <select id="modelSelect">
+    <option value="Jet_Engine_Model-v1.glb">Model 1</option>
+    <option value="Jet_Engine_Assembly_Model-v1.glb">Model 2</option>
+  </select>
+  
+  <!-- Viewer -->
+  <model-viewer id="viewer" src="model1.glb" auto-rotate camera-controls></model-viewer>
+
+  <script>
+    const viewer = document.getElementById('viewer');
+    const selector = document.getElementById('modelSelect');
+    selector.addEventListener('change', () => {
+      viewer.src = selector.value;
+    });
+  </script>
+</body>
+</html>
