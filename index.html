@@ -7,7 +7,7 @@
   <!-- Preload model-viewer library -->
   <link rel="preload" href="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js" as="script">
 
-  <!-- Preload first model for faster startup -->
+  <!-- Preload first model -->
   <link rel="preload" href="Jet_Engine_Model-v1.glb" as="fetch" type="model/gltf-binary" crossorigin>
 
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
@@ -44,12 +44,8 @@
       cursor: pointer;
       transition: background 0.2s;
     }
-    .tabs button:hover {
-      background: #005fa3;
-    }
-    .tabs button.active {
-      background: #004b80;
-    }
+    .tabs button:hover { background: #005fa3; }
+    .tabs button.active { background: #004b80; }
     model-viewer {
       width: 90vw;
       height: 75vh;
@@ -92,9 +88,28 @@
     const spinner = document.getElementById('spinner');
     const buttons = document.querySelectorAll('.tabs button');
 
+    let model2Preloaded = false;
+    let model2Fetched = false;
+
+    function preloadModel2() {
+      if (!model2Preloaded) {
+        fetch("Jet_Engine_Assembly_Model-v1.glb", { mode: "cors" })
+          .then(() => { model2Fetched = true; })
+          .catch(() => {});
+        model2Preloaded = true;
+      }
+    }
+
     function loadModel(src, btn) {
       spinner.style.display = "block";
+
+      // If Model 2 was already fetched, hide spinner almost instantly
+      if (src.includes("Assembly") && model2Fetched) {
+        setTimeout(() => spinner.style.display = "none", 50);
+      }
+
       viewer.src = src;
+
       buttons.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
     }
@@ -102,14 +117,12 @@
     viewer.addEventListener("load", () => {
       spinner.style.display = "none";
 
-      // Start preloading Model 2 only after Model 1 has finished
-      if (!window.model2Preloaded) {
-        fetch("Jet_Engine_Assembly_Model-v1.glb", { mode: "cors" }).catch(() => {});
-        window.model2Preloaded = true;
+      // Start preloading Model 2 only after Model 1 finishes
+      if (viewer.src.includes("Jet_Engine_Model-v1.glb")) {
+        preloadModel2();
       }
     });
 
-    // Load Model 1 immediately
     window.addEventListener("DOMContentLoaded", () => {
       loadModel("Jet_Engine_Model-v1.glb", document.getElementById('btn1'));
     });
