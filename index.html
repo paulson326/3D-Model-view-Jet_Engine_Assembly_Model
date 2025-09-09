@@ -24,22 +24,25 @@
       background: #f9f9f9;
     }
     h1 {
-      margin: 15px 0 5px;
-      font-size: 22px;
+      margin: 20px 0 10px;
+      font-size: 28px; /* desktop friendly */
+      font-weight: bold;
       color: #222;
+      text-align: center;
     }
     .tabs {
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
     .tabs button {
-      padding: 8px 14px;
-      margin: 0 5px;
+      padding: 10px 16px;
+      margin: 0 6px;
       font-size: 16px;
       border: none;
       border-radius: 6px;
       background: #0077cc;
       color: white;
       cursor: pointer;
+      transition: background 0.2s;
     }
     .tabs button:hover {
       background: #005fa3;
@@ -64,6 +67,7 @@
       width: 40px; height: 40px;
       animation: spin 1s linear infinite;
       z-index: 10;
+      display: none; /* hidden until needed */
     }
     @keyframes spin {
       0% { transform: translate(-50%, -50%) rotate(0deg); }
@@ -72,7 +76,7 @@
   </style>
 </head>
 <body>
-  <h1>🛬 3D Models Made with SolidWorks</h1>
+  <h1>🛬 3D Jet Engine Models (Made with SolidWorks)</h1>
 
   <!-- Model tabs -->
   <div class="tabs">
@@ -104,7 +108,7 @@
       spinner.style.display = "none";
     });
 
-    // Load Model 1 immediately on page open (faster with preload + eager)
+    // Load Model 1 immediately on page open
     window.addEventListener("DOMContentLoaded", () => {
       loadModel("Jet_Engine_Model-v1.glb", document.getElementById('btn1'));
     });
