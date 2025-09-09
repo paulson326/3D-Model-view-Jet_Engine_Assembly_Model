@@ -3,7 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <title>3D Model Viewer</title>
+
+  <!-- Preload model-viewer library -->
+  <link rel="preload" href="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js" as="script">
+
+  <!-- Preload first model for faster startup -->
+  <link rel="preload" href="Jet_Engine_Model-v1.glb" as="fetch" type="model/gltf-binary" crossorigin>
+
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
   <style>
     body {
       margin: 0;
@@ -36,6 +44,9 @@
     .tabs button:hover {
       background: #005fa3;
     }
+    .tabs button.active {
+      background: #004b80;
+    }
     model-viewer {
       width: 90vw;
       height: 75vh;
@@ -61,39 +72,41 @@
   </style>
 </head>
 <body>
-  <h1>🛬 3D Models Made with SolidWorks</h1>
+  <h1>🚀 3D Models Made with SolidWorks</h1>
 
   <!-- Model tabs -->
   <div class="tabs">
-    <button onclick="loadModel('Jet_Engine_Model-v1.glb')">Model 1</button>
-    <button onclick="loadModel('Jet_Engine_Assembly_Model-v1.glb')">Model 2</button>
+    <button id="btn1" class="active" onclick="loadModel('Jet_Engine_Model-v1.glb', this)">Model 1</button>
+    <button id="btn2" onclick="loadModel('Jet_Engine_Assembly_Model-v1.glb', this)">Model 2</button>
   </div>
 
   <!-- Spinner -->
   <div class="spinner" id="spinner"></div>
 
   <!-- Viewer -->
-  <model-viewer id="viewer" auto-rotate camera-controls></model-viewer>
+  <model-viewer id="viewer" auto-rotate camera-controls loading="eager"></model-viewer>
 
   <script>
     const viewer = document.getElementById('viewer');
     const spinner = document.getElementById('spinner');
+    const buttons = document.querySelectorAll('.tabs button');
 
-    function loadModel(src) {
+    function loadModel(src, btn) {
       spinner.style.display = "block";
-      viewer.src = ""; // clear any old model first
-      setTimeout(() => {
-        viewer.src = src;
-      }, 100);
+      viewer.src = src;
+
+      // highlight active button
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
     }
 
     viewer.addEventListener("load", () => {
       spinner.style.display = "none";
     });
 
-    // ✅ Load Jet_Engine_Model-v1.glb first by default
+    // Load Model 1 immediately on page open (faster with preload + eager)
     window.addEventListener("DOMContentLoaded", () => {
-      loadModel("Jet_Engine_Model-v1.glb");
+      loadModel("Jet_Engine_Model-v1.glb", document.getElementById('btn1'));
     });
   </script>
 </body>
