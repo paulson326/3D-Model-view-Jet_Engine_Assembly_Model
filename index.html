@@ -25,7 +25,7 @@
     }
     h1 {
       margin: 20px 0 10px;
-      font-size: 28px; /* desktop friendly */
+      font-size: 28px;
       font-weight: bold;
       color: #222;
       text-align: center;
@@ -67,7 +67,7 @@
       width: 40px; height: 40px;
       animation: spin 1s linear infinite;
       z-index: 10;
-      display: none; /* hidden until needed */
+      display: none;
     }
     @keyframes spin {
       0% { transform: translate(-50%, -50%) rotate(0deg); }
@@ -78,16 +78,13 @@
 <body>
   <h1>🛬 3D Jet Engine Models (Made with SolidWorks)</h1>
 
-  <!-- Model tabs -->
   <div class="tabs">
     <button id="btn1" class="active" onclick="loadModel('Jet_Engine_Model-v1.glb', this)">Model 1</button>
     <button id="btn2" onclick="loadModel('Jet_Engine_Assembly_Model-v1.glb', this)">Model 2</button>
   </div>
 
-  <!-- Spinner -->
   <div class="spinner" id="spinner"></div>
 
-  <!-- Viewer -->
   <model-viewer id="viewer" auto-rotate camera-controls loading="eager"></model-viewer>
 
   <script>
@@ -98,17 +95,21 @@
     function loadModel(src, btn) {
       spinner.style.display = "block";
       viewer.src = src;
-
-      // highlight active button
       buttons.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
     }
 
     viewer.addEventListener("load", () => {
       spinner.style.display = "none";
+
+      // Start preloading Model 2 only after Model 1 has finished
+      if (!window.model2Preloaded) {
+        fetch("Jet_Engine_Assembly_Model-v1.glb", { mode: "cors" }).catch(() => {});
+        window.model2Preloaded = true;
+      }
     });
 
-    // Load Model 1 immediately on page open
+    // Load Model 1 immediately
     window.addEventListener("DOMContentLoaded", () => {
       loadModel("Jet_Engine_Model-v1.glb", document.getElementById('btn1'));
     });
