@@ -81,7 +81,11 @@
 
     function loadModel(src) {
       spinner.style.display = "block";
-      viewer.src = src;
+      viewer.src = ""; // clear any old model first
+      // Load new model after a short delay (ensures clean swap)
+      setTimeout(() => {
+        viewer.src = src;
+      }, 100);
     }
 
     viewer.addEventListener("load", () => {
@@ -89,7 +93,9 @@
     });
 
     // Load Model 1 immediately on page open
-    loadModel("Jet_Engine_Assembly_Model-v1.glb");
+    window.addEventListener("DOMContentLoaded", () => {
+      loadModel("Jet_Engine_Assembly_Model-v1.glb");
+    });
   </script>
 </body>
 </html>
