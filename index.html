@@ -65,8 +65,8 @@
 
   <!-- Model tabs -->
   <div class="tabs">
-    <button onclick="loadModel('Jet_Engine_Assembly_Model-v1.glb')">Model 1</button>
-    <button onclick="loadModel('Jet_Engine_Model-v1.glb')">Model 2</button>
+    <button onclick="loadModel('Jet_Engine_Model-v1.glb')">Model 1</button>
+    <button onclick="loadModel('Jet_Engine_Assembly_Model-v1.glb')">Model 2</button>
   </div>
 
   <!-- Spinner -->
@@ -82,7 +82,6 @@
     function loadModel(src) {
       spinner.style.display = "block";
       viewer.src = ""; // clear any old model first
-      // Load new model after a short delay (ensures clean swap)
       setTimeout(() => {
         viewer.src = src;
       }, 100);
@@ -92,9 +91,9 @@
       spinner.style.display = "none";
     });
 
-    // Load Model 1 immediately on page open
+    // ✅ Load Jet_Engine_Model-v1.glb first by default
     window.addEventListener("DOMContentLoaded", () => {
-      loadModel("Jet_Engine_Assembly_Model-v1.glb");
+      loadModel("Jet_Engine_Model-v1.glb");
     });
   </script>
 </body>
